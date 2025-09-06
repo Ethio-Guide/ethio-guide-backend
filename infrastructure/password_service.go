@@ -2,6 +2,7 @@ package infrastructure
 
 import (
 	"EthioGuide/domain"
+	"regexp"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -29,4 +30,14 @@ func (s *bcryptService) HashPassword(password string) (string, error) {
 // It returns nil on success or an error if they don't match.
 func (s *bcryptService) ComparePassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
+}
+func (ps *bcryptService) IsPasswordStrong(password string) bool {
+	var (
+		hasMinLen  = len(password) >= 8
+		hasUpper   = regexp.MustCompile(`[A-Z]`).MatchString(password)
+		hasLower   = regexp.MustCompile(`[a-z]`).MatchString(password)
+		hasNumber  = regexp.MustCompile(`[0-9]`).MatchString(password)
+		hasSpecial = regexp.MustCompile(`[\W_]`).MatchString(password)
+	)
+	return hasMinLen && hasUpper && hasLower && hasNumber && hasSpecial
 }

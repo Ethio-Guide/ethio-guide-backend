@@ -8,7 +8,7 @@ var (
 	ErrUsernameEmpty      = errors.New("username cannot be empty")
 	ErrUsernameTooLong    = errors.New("username cannot exceed 50 characters")
 	ErrPasswordEmpty      = errors.New("password cannot be empty")
-	ErrPasswordTooShort   = errors.New("password must be at least 8 characters")
+	ErrWeakPassword       = errors.New("password must contain at least one uppercase letter, one lowercase letter, one number, and one special character")
 	ErrInvalidEmailFormat = errors.New("invalid email format")
 	ErrInvalidRole        = errors.New("invalid role provided")
 	ErrInvalidProvider    = errors.New("invalid provider")

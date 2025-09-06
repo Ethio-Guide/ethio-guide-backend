@@ -55,6 +55,7 @@ type IJWTService interface {
 type IPasswordService interface {
 	HashPassword(password string) (string, error)
 	ComparePassword(hashedPassword, password string) error
+	IsPasswordStrong(password string) bool 
 }
 
 type IRateLimiter interface {
