@@ -47,8 +47,8 @@ func (uc *UserUsecase) Register(c context.Context, user *domain.Account) error {
 	if _, err := mail.ParseAddress(user.Email); err != nil {
 		return domain.ErrInvalidEmailFormat
 	}
-	if len(user.PasswordHash) < 8 {
-		return domain.ErrPasswordTooShort
+	if !uc.passwordService.IsPasswordStrong(user.PasswordHash) {
+		return domain.ErrWeakPassword
 	}
 	if strings.TrimSpace(user.UserDetail.Username) == "" {
 		return domain.ErrUsernameEmpty
@@ -306,8 +306,8 @@ func (uc *UserUsecase) UpdatePassword(ctx context.Context, userID, currentPasswo
 		return domain.ErrAuthenticationFailed
 	}
 
-	if len(newPassword) < 8 {
-		return domain.ErrPasswordTooShort
+	if !uc.passwordService.IsPasswordStrong(newPassword) {
+		return domain.ErrWeakPassword
 	}
 
 	hashedNewPassword, err := uc.passwordService.HashPassword(newPassword)
@@ -489,8 +489,8 @@ func (uc *UserUsecase) ResetPassword(ctx context.Context, resetToken, newPasswor
 		return fmt.Errorf("empty field")
 	}
 
-	if len(newPassword) < 8 {
-		return domain.ErrPasswordTooShort
+	if !uc.passwordService.IsPasswordStrong(newPassword) {
+		return domain.ErrWeakPassword
 	}
 
 	ctx, cancel := context.WithTimeout(ctx, uc.contextTimeout)
