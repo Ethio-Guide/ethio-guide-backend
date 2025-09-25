@@ -1,0 +1,13 @@
+name: Scheduled Ping
+
+on:
+  schedule:
+    - cron: '*/14 * * * *'
+  workflow_dispatch:
+
+jobs:
+  send-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP GET Request
+        run: curl --fail "https://ethio-guide-backend.onrender.com/health"
